@@ -1,34 +1,26 @@
-// raylib-zig (c) Nikolas Wipper 2023
-
 const rl = @import("raylib");
+const std = @import("std");
+const gameState = @import("gameState.zig");
 
 pub fn main() anyerror!void {
-    // Initialization
-    //--------------------------------------------------------------------------------------
     const screenWidth = 800;
     const screenHeight = 450;
 
     rl.initWindow(screenWidth, screenHeight, "raylib-zig [core] example - basic window");
-    defer rl.closeWindow(); // Close window and OpenGL context
+    defer rl.closeWindow();
 
-    rl.setTargetFPS(60); // Set our game to run at 60 frames-per-second
-    //--------------------------------------------------------------------------------------
+    rl.setTargetFPS(60);
 
+    gameState.gameWorld.loadLevel(@constCast(&gameState.lvl1));
+
+    std.debug.print("{}\n", .{@TypeOf(gameState.gameWorld.lvl.map)});
+    std.debug.print("w: {}, h: {}\n", .{ gameState.gameWorld.lvl.width(), gameState.gameWorld.lvl.height() });
     // Main game loop
-    while (!rl.windowShouldClose()) { // Detect window close button or ESC key
-        // Update
-        //----------------------------------------------------------------------------------
-        // TODO: Update your variables here
-        //----------------------------------------------------------------------------------
-
-        // Draw
-        //----------------------------------------------------------------------------------
+    while (!rl.windowShouldClose()) {
         rl.beginDrawing();
         defer rl.endDrawing();
 
         rl.clearBackground(rl.Color.white);
-
-        rl.drawText("Congrats! You created your first window!", 190, 200, 20, rl.Color.light_gray);
-        //----------------------------------------------------------------------------------
+        gameState.gameWorld.drawLevel();
     }
 }
