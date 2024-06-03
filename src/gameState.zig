@@ -20,21 +20,37 @@ pub const GameWorld = struct {
         map: [][]const u8,
 
         const Self = @This();
-        pub fn width(self: Self) usize {
-            return self.map[0].len;
+        pub fn width(self: Self) u32 {
+            return @intCast(self.map[0].len);
         }
 
-        pub fn height(self: Self) usize {
-            return self.map.len;
+        pub fn height(self: Self) u32 {
+            return @intCast(self.map.len);
         }
     },
 
     pub fn drawLevel(self: GameWorld) void {
+        const tileW = @as(u32, @intCast(rl.getScreenWidth())) / self.lvl.width();
+        const tileH = @as(u32, @intCast(rl.getScreenHeight())) / self.lvl.height();
+
+        var y: i32 = 0;
+        var x: i32 = undefined;
         for (self.lvl.map) |cols| {
+            x = 0;
             for (cols) |char| {
-                std.debug.print("{c}", .{char});
+                const tileColor = switch (char) {
+                    '#' => rl.Color.dark_gray,
+                    'x' => rl.Color.dark_green,
+                    '.' => rl.Color.green,
+                    ' ' => rl.Color.beige,
+                    '~' => rl.Color.sky_blue,
+                    else => rl.Color.purple,
+                };
+
+                rl.drawRectangle(x, y, @intCast(tileW), @intCast(tileH), tileColor);
+                x += @intCast(tileW);
             }
-            std.debug.print("\n", .{});
+            y += @intCast(tileH);
         }
     }
 
@@ -63,9 +79,9 @@ pub const lvl1 = [_][]const u8{
     "##~~~~~~~~........  xxx##",
     "#~~~~~~~~.....       xx##",
     "#~~~~~~~~....   ...  ..##",
-    "#~~~~~~~~....  ........x#",
-    "#..~~~~~.....  ........x#",
-    "#..~~~~~.....  ........x#",
+    "#~~~~~~~~...x  ........x#",
+    "#..~~~~~...xx  ....xx..x#",
+    "#..~~~~~...xx  ...xx...x#",
     "#..~~~~~.....  .......x##",
     "##~~~~~.....  ...xxxxxx##",
     "###~~~.....  ..xxxxxxx###",
