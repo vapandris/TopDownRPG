@@ -63,8 +63,42 @@ pub const GameWorld = struct {
 
         //var startPos = self.camera.pos;
 
-        _ = visibleTilesX;
-        _ = visibleTilesY;
+        var camPos = self.camera.pos;
+        camPos.x -= @floatFromInt(Level.tileSize);
+        camPos.y += @floatFromInt(Level.tileSize);
+
+        var row: u32 = 0;
+        while (row <= visibleTilesY) : ({
+            row += 1;
+            camPos.y += Level.tileSize;
+        }) {
+            var col: u32 = 0;
+            camPos.x = self.camera.pos.x - @as(f32, @floatFromInt(Level.tileSize));
+            while (col <= visibleTilesX) : ({
+                col += 1;
+                camPos.x += Level.tileSize;
+            }) {
+                const indexes = Level.getIndexFromPos(camPos);
+                const tileToDraw = self.lvl.getTile(indexes.col, indexes.row);
+                if (tileToDraw) |char| {
+                    const tileColor = switch (char) {
+                        '#' => rl.Color.dark_gray,
+                        'x' => rl.Color.dark_green,
+                        '.' => rl.Color.green,
+                        ' ' => rl.Color.beige,
+                        '~' => rl.Color.sky_blue,
+                        else => rl.Color.purple,
+                    };
+
+                    const screenRect = self.camera.ScreenRect_From_GameRect(.{
+                        .pos = camPos,
+                        .size = .{ .w = Level.tileSize, .h = Level.tileSize },
+                    });
+
+                    rl.drawRectangle(screenRect.pos.x, screenRect.pos.y, screenRect.size.w, screenRect.size.h, tileColor);
+                }
+            }
+        }
     }
 };
 
@@ -102,14 +136,25 @@ const Level = struct {
         };
     }
 
-    pub fn getTile(self: Level, x: u32, y: u32) ?u8 {
-        if (0 <= x and
-            self.width() < x and
-            0 <= y and
-            self.height() < y)
+    pub fn getIndexFromPos(pos: geometry.Vec2) struct { col: u32, row: u32 } {
+        var p = pos;
+        if (pos.x < 0) p.x = 0;
+        if (pos.y < 0) p.y = 0;
+
+        return .{
+            .col = @intFromFloat((p.x - topLeftPos.x) / tileSize),
+            .row = @intFromFloat((p.y - topLeftPos.y) / tileSize),
+        };
+    }
+
+    pub fn getTile(self: Level, col: u32, row: u32) ?u8 {
+        if (0 <= col and
+            self.cols() < col and
+            0 <= row and
+            self.rows() < row)
         {
-            return self.map[y][x];
-        } else unreachable;
+            return self.map[row][col];
+        }
 
         return null;
     }
