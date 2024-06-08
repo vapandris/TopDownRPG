@@ -12,6 +12,24 @@ pub const Camera = struct {
         };
     }
 
+    /// Follow the position passed as argument.
+    /// For now it will just snap to it, later, it should be more gradual.
+    pub fn centerOn(self: *Camera, pos: geometry.Vec2) void {
+        const mid = geometry.Vec2{
+            .x = self.pos.x + self.size.w / 2,
+            .y = self.pos.y + self.size.h / 2,
+        };
+
+        // Vector pointing from mid to pos
+        const delta = geometry.Vec2{
+            .x = pos.x - mid.x,
+            .y = pos.y - mid.y,
+        };
+
+        self.*.pos.x += delta.x;
+        self.*.pos.y += delta.y;
+    }
+
     /// Is used to convert mouse clicks to game-coordinates
     pub fn GamePos_From_ScreenPos(self: Camera, screenPos: rl.Vector2) geometry.Vec2 {
         if (self.size.w <= 0 or self.size.h <= 0) unreachable;
