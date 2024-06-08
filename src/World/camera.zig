@@ -14,7 +14,7 @@ pub const Camera = struct {
 
     /// Is used to convert mouse clicks to game-coordinates
     pub fn GamePos_From_ScreenPos(self: Camera, screenPos: rl.Vector2) geometry.Vec2 {
-        if (self.size.w == 0 or self.size.h == 0) unreachable;
+        if (self.size.w <= 0 or self.size.h <= 0) unreachable;
 
         const screenSize = getScreenSize();
         const widthScale = self.size.w / screenSize.w;
@@ -28,7 +28,7 @@ pub const Camera = struct {
 
     /// Is used to figure out where to draw entities to the screen
     pub fn ScreenRect_From_GameRect(self: Camera, gameRect: geometry.Rect) ScreenRect {
-        if (self.size.w == 0 or self.size.h == 0) unreachable;
+        if (self.size.w <= 0 or self.size.h <= 0) unreachable;
 
         const screenSize = getScreenSize();
         const widthScale = self.size.w / screenSize.w;
@@ -48,7 +48,7 @@ pub const Camera = struct {
 
     /// Should never be used in production code. Shall be used for debug purposes only
     pub fn ScreenCircle_From_GameCircle(self: Camera, gameCircle: geometry.Circle) ScreenCircle {
-        if (self.size.w == 0 or self.size.h == 0) unreachable;
+        if (self.size.w <= 0 or self.size.h <= 0) unreachable;
 
         const screenSize = getScreenSize();
         const widthScale = self.size.w / screenSize.w;

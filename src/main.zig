@@ -17,8 +17,18 @@ pub fn main() anyerror!void {
         .r = 30,
     };
 
-    std.debug.print("{}\n", .{@TypeOf(gameState.gameWorld.lvl.map)});
-    std.debug.print("w: {}, h: {}\n", .{ gameState.gameWorld.lvl.width(), gameState.gameWorld.lvl.height() });
+    for (0..40) |i| {
+        const f: f32 = @floatFromInt(i);
+        std.debug.print("sqrt({d}): {d}\n", .{ f, @import("World/math.zig").sqrt(f) });
+    }
+
+    const seed = 320;
+    @import("World/math.zig").seed(seed);
+    for (0..40) |i| {
+        _ = i;
+        std.debug.print("rand: {}\n", .{@import("World/math.zig").rand() % 10});
+    }
+
     // Main game loop
     while (!rl.windowShouldClose()) {
         gameState.gameWorld.update();
