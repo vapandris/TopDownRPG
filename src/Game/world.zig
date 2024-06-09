@@ -27,7 +27,7 @@ pub const GameWorld = struct {
             .player = undefined,
             .camera = .{
                 .pos = .{ .x = 0, .y = 0 },
-                .size = .{ .w = 600, .h = 400 },
+                .size = .{ .w = 150, .h = 100 },
             },
         };
 
@@ -65,7 +65,7 @@ pub const GameWorld = struct {
 
         var camPos = self.camera.pos;
         camPos.x -= @floatFromInt(Level.tileSize);
-        camPos.y += @floatFromInt(Level.tileSize);
+        camPos.y -= @floatFromInt(Level.tileSize);
 
         var row: u32 = 0;
         while (row <= visibleTilesY) : ({
