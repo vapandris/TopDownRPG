@@ -69,15 +69,15 @@ pub const Camera = struct {
         if (self.size.w <= 0 or self.size.h <= 0) unreachable;
 
         const screenSize = getScreenSize();
-        const widthScale = self.size.w / screenSize.w;
-        const heightScale = self.size.h / screenSize.h;
+        const widthScale = screenSize.w / self.size.w;
+        const heightScale = screenSize.h / self.size.h;
 
         return .{
             .pos = .{
                 .x = @intFromFloat(@ceil((gameCircle.pos.x - self.pos.x) * widthScale)),
                 .y = @intFromFloat(@ceil((gameCircle.pos.y - self.pos.y) * heightScale)),
             },
-            .r = @intFromFloat(@ceil(gameCircle.r * (widthScale / 2 + heightScale / 2))),
+            .r = gameCircle.r * (widthScale / 2 + heightScale / 2),
         };
     }
 };
@@ -90,5 +90,5 @@ const ScreenRect = struct {
 
 const ScreenCircle = struct {
     pos: struct { x: i32, y: i32 },
-    r: i32,
+    r: f32,
 };

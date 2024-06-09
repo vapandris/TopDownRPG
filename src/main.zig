@@ -24,6 +24,8 @@ pub fn main() anyerror!void {
     rl.setTargetFPS(60);
 
     while (!rl.windowShouldClose()) {
+        world.gameWorld.update();
+
         rl.beginDrawing();
         defer rl.endDrawing();
 

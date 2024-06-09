@@ -27,14 +27,14 @@ pub const GameWorld = struct {
             .player = undefined,
             .camera = .{
                 .pos = .{ .x = 0, .y = 0 },
-                .size = .{ .w = 150, .h = 100 },
+                .size = .{ .w = 250, .h = 200 },
             },
         };
 
         result.lvl.loadLevel(@constCast(&lvl1));
         result.player = .{
             .pos = Level.getGamePosition(lvl1StartCol, lvl1StartRow),
-            .r = 30,
+            .r = 10,
         };
         result.camera.centerOn(result.player.pos);
 
@@ -49,10 +49,10 @@ pub const GameWorld = struct {
         const goUp = rl.isKeyDown(.key_w) or rl.isKeyDown(.key_up);
         const goDown = rl.isKeyDown(.key_s) or rl.isKeyDown(.key_down);
 
-        if (goLeft) self.*.player.vel.x -= 50;
-        if (goRight) self.*.player.vel.x += 50;
-        if (goUp) self.*.player.vel.y -= 50;
-        if (goDown) self.*.player.vel.y += 50;
+        if (goLeft) self.*.player.vel.x -= 25;
+        if (goRight) self.*.player.vel.x += 25;
+        if (goUp) self.*.player.vel.y -= 25;
+        if (goDown) self.*.player.vel.y += 25;
 
         self.*.player.move(8);
     }
@@ -100,6 +100,9 @@ pub const GameWorld = struct {
                 }
             }
         }
+
+        const screenCircle = self.camera.ScreenCircle_From_GameCircle(self.player);
+        rl.drawCircle(screenCircle.pos.x, screenCircle.pos.y, screenCircle.r, rl.Color.blue);
     }
 };
 
