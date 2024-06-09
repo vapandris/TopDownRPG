@@ -27,7 +27,7 @@ pub const GameWorld = struct {
             .player = undefined,
             .camera = .{
                 .pos = .{ .x = 0, .y = 0 },
-                .size = .{ .w = 300, .h = 200 },
+                .size = .{ .w = 600, .h = 400 },
             },
         };
 
@@ -79,6 +79,7 @@ pub const GameWorld = struct {
                 camPos.x += Level.tileSize;
             }) {
                 const indexes = Level.getIndexFromPos(camPos);
+
                 const tileToDraw = self.lvl.getTile(indexes.col, indexes.row);
                 if (tileToDraw) |char| {
                     const tileColor = switch (char) {
@@ -149,9 +150,9 @@ const Level = struct {
 
     pub fn getTile(self: Level, col: u32, row: u32) ?u8 {
         if (0 <= col and
-            self.cols() < col and
+            col < self.cols() and
             0 <= row and
-            self.rows() < row)
+            row < self.rows())
         {
             return self.map[row][col];
         }

@@ -27,8 +27,7 @@ pub fn main() anyerror!void {
         rl.beginDrawing();
         defer rl.endDrawing();
 
-        world.gameWorld.draw();
-
         rl.clearBackground(rl.Color.white);
+        world.gameWorld.draw();
     }
 }
