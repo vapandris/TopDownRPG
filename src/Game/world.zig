@@ -4,6 +4,7 @@ const std = @import("std");
 const camera = @import("../Base/camera.zig");
 const geometry = @import("../Base/geometry.zig");
 const timer = @import("../Base/timer.zig");
+const math = @import("../Base/math.zig");
 
 pub const GameStatus = union(enum) {
     mainMenu,
@@ -53,6 +54,8 @@ pub const GameWorld = struct {
         if (goRight) self.*.player.vel.x += 25;
         if (goUp) self.*.player.vel.y -= 25;
         if (goDown) self.*.player.vel.y += 25;
+
+        _ = math.sqrt(2);
 
         self.*.player.move(8);
     }
@@ -189,3 +192,7 @@ pub const lvl1 = [_][]const u8{
 
 pub const lvl1StartCol = 9;
 pub const lvl1StartRow = 9;
+
+test "rando test numero zwei" {
+    try std.testing.expect(true);
+}

@@ -33,3 +33,7 @@ pub fn main() anyerror!void {
         world.gameWorld.draw();
     }
 }
+
+test "main_test" {
+    std.testing.refAllDecls(@This());
+}

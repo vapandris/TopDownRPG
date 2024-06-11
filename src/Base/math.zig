@@ -45,3 +45,7 @@ var s: u64 = undefined;
 pub fn seed(newSeed: u64) void {
     s = newSeed;
 }
+
+test "same failing test" {
+    try @import("std").testing.expect(false);
+}
